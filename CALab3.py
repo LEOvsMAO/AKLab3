@@ -16,8 +16,18 @@ def hello_world():
     return render_template('layout.html', message='some shitty messsage')
 
 
+@app.route('/users')
+def all_users():
+    return render_template('users.html')
+
+
+@app.route('/user/<int:id>')
+def edit_user(id):
+    return render_template('edit.html')
+
+
 @app.route('/api/users')
-def show_all():
+def all_users_json():
     t = db.users.find()
     res = [{id_key: item[id_key], name_key:item[name_key], address_key: item[address_key]} for item in t]
     print(res)
@@ -34,9 +44,10 @@ def add():
     })
 
 
-@app.route('/api/remove', methods=['POST'])
-def remove():
-    db.users.delete_one({id_key: request.form[id_key]})
+@app.route('/api/remove/<int:id>', methods=['POST'])
+def remove(id):
+    # db.users.delete_one({id_key: request.form[id_key]})
+    db.users.delete_one({id_key: id})
 
 
 @app.route('/api/edit/<int:id>', methods=['GET'])
