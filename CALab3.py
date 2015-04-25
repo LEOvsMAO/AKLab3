@@ -19,15 +19,7 @@ def hello_world():
 @app.route('/api/users')
 def show_all():
     t = db.users.find()
-    res = []
-    for item in t:
-        print(item[id_key])
-        res.append({
-            id_key: item[id_key],
-            name_key: item[name_key],
-            address_key: item[address_key]
-        })
-
+    res = [{id_key: item[id_key], name_key:item[name_key], address_key: item[address_key]} for item in t]
     print(res)
     json_str = json.dumps(res)
     return json_str
@@ -36,7 +28,6 @@ def show_all():
 @app.route('/api/add', methods=['POST'])
 def add():
     db.users.insert_one({
-        # NEW OBJECT
         id_key: db.users.count() + 1,
         name_key: request.form[name_key],
         address_key: request.form[address_key]
