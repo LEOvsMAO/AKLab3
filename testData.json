@@ -1,0 +1,27 @@
+[
+  {
+    "id": 0,
+    "name": "John",
+    "address": "Baker st. 1"
+  },
+  {
+    "id": 1,
+    "name": "Mike",
+    "address": "Pikadilli st. 4"
+  },
+  {
+    "id": 2,
+    "name": "Roy",
+    "address": "Trafalgar sq. 6"
+  },
+  {
+    "id": 3,
+    "name": "Peter",
+    "address": "Some other address"
+  },
+  {
+    "id": 4,
+    "name": "May",
+    "address": "Khreschatyk 12"
+  }
+]

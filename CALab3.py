@@ -47,7 +47,8 @@ def add():
 @app.route('/api/remove/<int:id>', methods=['POST'])
 def remove(id):
     # db.users.delete_one({id_key: request.form[id_key]})
-    db.users.delete_one({id_key: id})
+    db.users.remove({id_key: id})
+
 
 
 @app.route('/api/edit/<int:id>', methods=['GET'])

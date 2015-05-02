@@ -10,6 +10,7 @@
     <td></td>
 </tr>
 </table>
+    <button onclick="sendRemoveRequest(5)">Remove!</button>
 
     <script>
         (function() {
@@ -21,13 +22,20 @@
                         $.each(data, function(i, val){
                             console.log("item:" + i);
                             $("#mytable").find("tr:last").after("<tr>" + "<td>" + val['id'] + "</td>"
-                                             + "<td>" + val['name'] + "</td>"
+                                             + "<td><a href = '/user/" + val['id'] + "'>" + val['name'] + "</a></td>"
                                              + "<td>" + val['address'] + "</td>"
-                                             + "<td>" + "Remove!" + "</td>"
-                                    + "</tr>");
+                                             + "<td>" +
+                            '<button onclick="sendRemoveRequest(' + val['id'] + ')">Remove</button>'
+                            + "</td></tr>");
                         });
                 })
         })();
+        sendRemoveRequest = function(i) {
+            alert("removing" + i);
+            $.post('/api/remove/' + i).done(function () {
+                location.reload();
+            });
+        }
     </script>
 
 {% endblock %}
