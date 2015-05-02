@@ -23,7 +23,7 @@ def all_users():
 
 @app.route('/user/<int:id>')
 def edit_user(id):
-    return render_template('edit.html')
+    return render_template('edit.html', id=id)
 
 
 @app.route('/api/users')
