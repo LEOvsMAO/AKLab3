@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<table class="table-bordered">
+<table border="1" id="mytable">
 <tr>
     <td>Id</td>
     <td>Name</td>
@@ -11,5 +11,23 @@
 </tr>
 </table>
 
+    <script>
+        (function() {
+        $.getJSON('/api/users',{})
+                .fail(function(){
+                    console.log("wtf???")
+                })
+                .done(function(data){
+                        $.each(data, function(i, val){
+                            console.log("item:" + i);
+                            $("#mytable").find("tr:last").after("<tr>" + "<td>" + val['id'] + "</td>"
+                                             + "<td>" + val['name'] + "</td>"
+                                             + "<td>" + val['address'] + "</td>"
+                                             + "<td>" + "Remove!" + "</td>"
+                                    + "</tr>");
+                        });
+                })
+        })();
+    </script>
 
 {% endblock %}
