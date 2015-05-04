@@ -38,4 +38,4 @@ class Lab3Test(unittest.TestCase):
         prev_count = default_db.users.count()
         add_response = app.test_client().post('/api/add', data={'name': 'John', 'address': 'NewStreet'})
         get_response = app.test_client().get('/api/edit/' + str(prev_count + 1))
-        self.assertEqual(get_response.data, {'id': prev_count + 1, 'name': 'John', 'address': 'NewStreet'})
+        self.assertEqual(get_response.data, json.dumps({'id': prev_count + 1, 'name': 'John', 'address': 'NewStreet'}))

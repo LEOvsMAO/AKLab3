@@ -30,9 +30,8 @@
                 name = $form.find("input[id='name']").val(),
                 address = $form.find("input[id='address']").val(),
                 url = $form.attr('action');
-            alert('data:' + $form.serialize());
-            var posting = $.post(url, {'name': name, 'address': address});
-            posting.done(function(){
+            alert('mmmm\n' + JSON.stringify({'name': name, 'address': address}))
+            $.post(url, {'name': name, 'address': address}).done(function(){
                 location.reload();
             });
 
