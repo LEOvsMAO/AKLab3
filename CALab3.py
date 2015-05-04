@@ -68,9 +68,8 @@ def edit(id, db=default_db):
         name_key: request.form[name_key],
         address_key: request.form[address_key]
     }
-    user = db.users.find_one({id_key: id})
-    db.users.update({id_key: id}, {'$set': {name_key: request.form[name_key], address_key: request.form[address_key]}})
-    # db.users.find_one_and_update({id_key: id}, new_user)
+
+    db.users.update({id_key: id}, {'$set': new_user})
     return json.dumps(new_user)
 
 
