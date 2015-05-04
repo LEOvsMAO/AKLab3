@@ -5,7 +5,7 @@ import pymongo
 app = Flask(__name__)
 mongo = PyMongo(app)
 client = pymongo.MongoClient('localhost', 27017)
-db = client['test']
+default_db = client['test']
 id_key = 'id'
 name_key = 'name'
 address_key = 'address'
@@ -27,16 +27,16 @@ def edit_user(id):
 
 
 @app.route('/api/users')
-def all_users_json():
+def all_users_json(db=default_db):
     t = db.users.find()
     res = [{id_key: item[id_key], name_key:item[name_key], address_key: item[address_key]} for item in t]
-    print(res)
+    # print(res)
     json_str = json.dumps(res)
     return json_str
 
 
 @app.route('/api/add', methods=['POST'])
-def add():
+def add(db=default_db):
     db.users.insert_one({
         id_key: db.users.count() + 1,
         name_key: request.form[name_key],
@@ -45,14 +45,14 @@ def add():
 
 
 @app.route('/api/remove/<int:id>', methods=['POST'])
-def remove(id):
+def remove(id, db=default_db):
     # db.users.delete_one({id_key: request.form[id_key]})
     db.users.remove({id_key: id})
 
 
 
 @app.route('/api/edit/<int:id>', methods=['GET'])
-def get_detail_info(id):
+def get_detail_info(id, db=default_db):
     t = db.users.find_one({id_key: id})
     res = {}
     for i in [id_key, name_key, address_key]:
@@ -62,7 +62,7 @@ def get_detail_info(id):
 
 
 @app.route('/api/edit/<int:id>', methods=['POST'])
-def edit(id):
+def edit(id, db=default_db):
     new_user = {
         id_key: id,
         name_key: request.form[name_key],
