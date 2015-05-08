@@ -22,10 +22,10 @@
                         $.each(data, function(i, val){
                             console.log("item:" + i);
                             $("#mytable").find("tr:last").after("<tr>" + "<td>" + val['id'] + "</td>"
-                                             + "<td><a href = '/user/" + val['id'] + "'>" + val['name'] + "</a></td>"
+                                             + "<td><a name='userLink' href = '/user/" + val['id'] + "'>" + val['name'] + "</a></td>"
                                              + "<td>" + val['address'] + "</td>"
                                              + "<td>" +
-                            '<button onclick="sendRemoveRequest(' + val['id'] + ')">Remove</button></td></tr>');
+                            '<button name="removeButton" onclick="sendRemoveRequest(' + val['id'] + ')">Remove</button></td></tr>');
                         });
                 })
         })();
