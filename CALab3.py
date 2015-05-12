@@ -1,9 +1,7 @@
 from flask import Flask, json, render_template, request
-from flask.ext.pymongo import PyMongo
 import pymongo
 
 app = Flask(__name__)
-mongo = PyMongo(app)
 client = pymongo.MongoClient('localhost', 27017)
 default_db = client['test']
 id_key = 'id'
@@ -13,7 +11,7 @@ address_key = 'address'
 
 @app.route('/')
 def hello_world():
-    return render_template('layout.html', message='some shitty messsage')
+    return render_template('layout.html')
 
 
 @app.route('/users')
@@ -26,19 +24,27 @@ def edit_user(id):
     return render_template('edit.html', id=id)
 
 
+@app.route('/add')
+def add_user():
+    return render_template('add.html')
+
+
 @app.route('/api/users')
 def all_users_json(db=default_db):
-    t = db.users.find()
+    t = db.users.find().sort(id_key)
     res = [{id_key: item[id_key], name_key:item[name_key], address_key: item[address_key]} for item in t]
-    # print(res)
     json_str = json.dumps(res)
+    print("all users requested: ", json_str)
     return json_str
 
 
 @app.route('/api/add', methods=['POST'])
 def add(db=default_db):
+    users = db.users.find().sort([(id_key, pymongo.DESCENDING)])
+    user = users[0]
+    print("adding: ", user)
     db.users.insert_one({
-        id_key: db.users.count() + 1,
+        id_key: user[id_key] + 1,
         name_key: request.form[name_key],
         address_key: request.form[address_key]
     })
@@ -47,6 +53,7 @@ def add(db=default_db):
 @app.route('/api/remove/<int:id>', methods=['POST'])
 def remove(id, db=default_db):
     # db.users.delete_one({id_key: request.form[id_key]})
+    print("removing: ", id)
     db.users.remove({id_key: id})
 
 
@@ -58,6 +65,7 @@ def get_detail_info(id, db=default_db):
     for i in [id_key, name_key, address_key]:
         res[i] = t[i]
     json_str = json.dumps(res)
+    print("get edit:", json_str)
     return json_str
 
 
@@ -70,8 +78,9 @@ def edit(id, db=default_db):
     }
 
     db.users.update({id_key: id}, {'$set': new_user})
+    print("post edit: ", new_user)
     return json.dumps(new_user)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

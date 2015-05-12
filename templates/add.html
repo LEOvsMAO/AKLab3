@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+
+<form id="saveForm" action= '/api/add' method="post">
+
+    <label for="name">Name</label>
+    <input type="text" id="name"/>
+
+    <label for="address">Address</label>
+    <input type="text" id="address"/>
+
+    <input type="submit" value="Save" id="save"/>
+</form>
+
+    <script>
+        (function () {
+            $.getJSON('/api/edit/{{ id }}', {})
+                    .done(function(data){
+                        $('#name').val(data['name']);
+                        $('#address').val(data['address']);
+                    })
+        })();
+        $("#saveForm").submit(function(event){
+            event.preventDefault();
+            var $form = $(this),
+                name = $form.find("input[id='name']").val(),
+                address = $form.find("input[id='address']").val(),
+                url = $form.attr('action');
+            $.post(url, {'name': name, 'address': address}).done(function(){
+                // location.reload();
+                window.location.href = "/users"
+            });
+
+        });
+    </script>
+
+{% endblock %}
