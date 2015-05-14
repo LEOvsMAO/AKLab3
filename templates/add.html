@@ -4,7 +4,6 @@
 
 
 <form id="saveForm" action= '/api/add' method="post">
-
     <label for="name">Name</label>
     <input type="text" id="name"/>
 
@@ -15,13 +14,6 @@
 </form>
 
     <script>
-        (function () {
-            $.getJSON('/api/edit/{{ id }}', {})
-                    .done(function(data){
-                        $('#name').val(data['name']);
-                        $('#address').val(data['address']);
-                    })
-        })();
         $("#saveForm").submit(function(event){
             event.preventDefault();
             var $form = $(this),
@@ -29,8 +21,7 @@
                 address = $form.find("input[id='address']").val(),
                 url = $form.attr('action');
             $.post(url, {'name': name, 'address': address}).done(function(){
-                // location.reload();
-                window.location.href = "/users"
+                location.reload();
             });
 
         });

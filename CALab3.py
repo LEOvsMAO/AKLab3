@@ -42,12 +42,16 @@ def all_users_json(db=default_db):
 def add(db=default_db):
     users = db.users.find().sort([(id_key, pymongo.DESCENDING)])
     user = users[0]
-    print("adding: ", user)
-    db.users.insert_one({
+
+    new_user = {
         id_key: user[id_key] + 1,
         name_key: request.form[name_key],
         address_key: request.form[address_key]
-    })
+    }
+    json_str = json.dumps(new_user)
+    db.users.insert_one(new_user)
+    print("adding: ", new_user)
+    return json_str
 
 
 @app.route('/api/remove/<int:id>', methods=['POST'])
@@ -55,6 +59,7 @@ def remove(id, db=default_db):
     # db.users.delete_one({id_key: request.form[id_key]})
     print("removing: ", id)
     db.users.remove({id_key: id})
+    return '', 204
 
 
 
@@ -76,10 +81,10 @@ def edit(id, db=default_db):
         name_key: request.form[name_key],
         address_key: request.form[address_key]
     }
-
+    json_str = json.dumps(new_user)
     db.users.update({id_key: id}, {'$set': new_user})
     print("post edit: ", new_user)
-    return json.dumps(new_user)
+    return json_str
 
 
 if __name__ == '__main__':
