@@ -1,10 +1,14 @@
 from flask import json
-from CALab3 import app, remove, default_db
+from CALab3 import app, remove, g
+from mock import patch
 import unittest
 
 
 class Lab3Test(unittest.TestCase):
-    def test_adding(self):
+
+    @patch("CALab3.connect_db")
+    def test_adding(self, mock_connect_db):
+
         prev_count = default_db.users.count()
         response = app.test_client().post('/api/add', data={'name': 'testAdd', 'address': 'NewStreet'})
 
