@@ -1,5 +1,8 @@
 import pymongo
-from CALab3 import g, id_key, name_key, address_key
+from flask import g
+id_key = 'id'
+name_key = 'name'
+address_key = 'address'
 
 
 def get_all_users(ascending=pymongo.ASCENDING):
@@ -26,4 +29,4 @@ def add_user(new_user):
 
 def remove_user(user_id):
     db = g.default_db
-    db.users.remove({id_key: id})
+    db.users.remove({id_key: user_id})

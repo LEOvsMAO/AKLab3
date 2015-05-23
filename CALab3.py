@@ -1,5 +1,6 @@
 from flask import Flask, json, render_template, request, g
-from db_utils import *
+import db_utils
+from db_utils import id_key, name_key, address_key
 import pymongo
 
 app = Flask(__name__)
@@ -13,11 +14,6 @@ def connect_to_db():
 @app.before_request
 def before_request():
     g.default_db = connect_to_db()
-
-
-id_key = r'id'
-name_key = r'name'
-address_key = r'address'
 
 
 @app.route('/')
@@ -42,7 +38,7 @@ def add_user():
 
 @app.route('/api/users')
 def all_users_json():
-    t = get_all_users()
+    t = db_utils.get_all_users()
     res = [{id_key: item[id_key], name_key: item[name_key], address_key: item[address_key]} for item in t]
     json_str = json.dumps(res)
     print("all users requested: ", json_str)
@@ -51,7 +47,7 @@ def all_users_json():
 
 @app.route('/api/add', methods=['POST'])
 def add():
-    users = get_all_users(pymongo.DESCENDING)
+    users = db_utils.get_all_users(pymongo.DESCENDING)
     user = users[0]
 
     new_user = {
@@ -60,7 +56,7 @@ def add():
         address_key: request.form[address_key]
     }
     json_str = json.dumps(new_user)
-    add_user(new_user)
+    db_utils.add_user(new_user)
     print("adding: ", new_user)
     return json_str
 
@@ -69,13 +65,13 @@ def add():
 def remove(id):
     # db.users.delete_one({id_key: request.form[id_key]})
     print("removing: ", id)
-    remove_user(id)
+    db_utils.remove_user(id)
     return '', 204
 
 
 @app.route('/api/edit/<int:id>', methods=['GET'])
 def get_detail_info(id):
-    t = get_one_user(id)
+    t = db_utils.get_one_user(id)
     res = {}
     for i in [id_key, name_key, address_key]:
         res[i] = t[i]
@@ -92,7 +88,7 @@ def edit(id):
         address_key: request.form[address_key]
     }
     json_str = json.dumps(new_user)
-
+    db_utils.update_user(id, new_user)
     print("post edit: ", new_user)
     return json_str
 
