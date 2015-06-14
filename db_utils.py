@@ -30,3 +30,5 @@ def add_user(new_user):
 def remove_user(user_id):
     db = g.default_db
     db.users.remove({id_key: user_id})
+    
+    
