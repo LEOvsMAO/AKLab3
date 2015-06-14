@@ -50,3 +50,4 @@ class Lab3Test(unittest.TestCase):
         get_response = app.test_client().get('/api/users')
         print("all_users:", json.loads(get_response.data.decode()))
         assert json.loads(get_response.data.decode()), users
+        
